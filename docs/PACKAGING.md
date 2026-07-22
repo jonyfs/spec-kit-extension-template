@@ -203,3 +203,28 @@ specify extension remove <id> --keep-config
 5. Install the released ZIP via `--from <asset-url>` in a clean project to prove the
    published artifact, not just the working tree.
 6. Submit or update the catalog entry, `download_url` pointing at the release asset.
+
+## Worked example: this repository's own release
+
+The `trace` extension in `template/` was released and verified through step 5, so the
+checklist above is exercised rather than aspirational:
+
+```bash
+# 4. Build with the manifest at the archive root
+cd template && zip -qr /tmp/trace-1.0.0.zip . -x '.git/*'
+unzip -l /tmp/trace-1.0.0.zip | head    # extension.yml must be the first entry
+
+# 4. Tag and attach
+gh release create trace-v1.0.0 /tmp/trace-1.0.0.zip
+
+# 5. Prove the PUBLISHED artifact, not the working tree
+specify init proof --integration claude --ignore-agent-tools && cd proof
+specify extension add trace --from https://github.com/jonyfs/spec-kit-extension-template/releases/download/trace-v1.0.0/trace-1.0.0.zip
+specify extension list          # -> Feature Traceability Check (v1.0.0)
+specify extension remove trace --force
+```
+
+Step 5 is the one that matters and the one most often skipped. `--dev` passing proves
+the working tree parses. It does not prove `extension.yml` sits at the archive root, that
+the release URL resolves, or that the CLI's GitHub asset resolution finds it. Those are
+the only paths a stranger will ever use.

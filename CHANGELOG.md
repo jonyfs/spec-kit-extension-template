@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   right reasons. Constitution Principle XV: a gate that has only ever passed carries no
   information, because passing and being unreachable produce identical output.
 
+- `trace` released as `trace-v1.0.0` and verified by installing the published ZIP from
+  its release URL into a clean project, per Principle XII. `docs/PACKAGING.md` now
+  carries the worked example.
+- Repository flagged as a GitHub template, so it can be used with **Use this template**.
+
 ### Fixed
 
 - `scripts/install-test.sh` could not pass on macOS for any package. The extension id
