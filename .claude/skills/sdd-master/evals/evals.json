@@ -1,0 +1,26 @@
+{
+  "skill_name": "sdd-master",
+  "evals": [
+    {
+      "id": 0,
+      "name": "route-large-feature-to-full-flow",
+      "prompt": "we're adding multi-tenant support to our billing service. right now every table just has a customer_id and the API assumes one org per account. we need real tenant isolation, per-tenant rate limits, and an admin view that can impersonate a tenant for support. i have no idea where to start and my lead wants something written down before i touch code. how should i approach this?",
+      "expected_output": "Routes to the full Spec Kit flow. Names the actual commands in order (constitution check, /speckit.specify, /speckit.clarify, /speckit.plan, /speckit.tasks, /speckit.implement), explains what artifact each produces and why clarify matters before plan for a feature this ambiguous. Does not just start writing code or hand back generic architecture advice.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "resist-ceremony-on-trivial-change",
+      "prompt": "the footer on our marketing site says Copyright 2024, needs to say 2026. also the link to the careers page 404s, should point to /careers not /career. can you sort that out",
+      "expected_output": "Recognizes this is far below the threshold where SDD pays off. Does NOT generate a spec.md, plan.md, or tasks.md and does not walk the user through the Spec Kit workflow. Just fixes it (or explains the fix). If it mentions SDD at all it is to explain briefly why the ceremony is not warranted here.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "diagnose-broken-mid-flow-state",
+      "prompt": "ok i'm confused. i ran /speckit.specify then went straight to /speckit.tasks and it complained. then i edited spec.md by hand to add two new requirements but plan.md still describes the old design. tasks.md has like 40 items half of which don't make sense anymore. what's the actual right way out of this without throwing everything away",
+      "expected_output": "Correctly diagnoses two separate problems: (a) tasks requires plan.md to exist first, hence the complaint; (b) the hand-edit to spec.md created drift so plan.md and tasks.md are now stale relative to spec.md. Prescribes a concrete recovery order (re-run plan after the spec change, then regenerate tasks) and names /speckit.analyze as the cross-artifact consistency check. Does not tell the user to start over from scratch.",
+      "files": []
+    }
+  ]
+}

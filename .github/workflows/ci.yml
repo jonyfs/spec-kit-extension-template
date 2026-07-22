@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint Markdown and YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint YAML
+        # Vendored extensions under .specify/extensions/ belong to their upstream
+        # authors (constitution: Vendored Third-Party Assets), so they are excluded.
+        run: |
+          pipx install yamllint
+          yamllint -c .yamllint.yml .
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: |
+            docs/**/*.md
+            *.md
+
+  validate:
+    name: Validate extension manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install pyyaml
+
+      - name: Validate every extension package
+        # Every directory holding an extension.yml is a package this repo is
+        # responsible for keeping valid (constitution Principles I, II, IV, V).
+        # Vendored third-party extensions under .specify/extensions/ are excluded:
+        # they belong to their upstream authors, and this repo does not get to fail
+        # its own build over someone else's manifest.
+        run: |
+          mapfile -t packages < <(
+            find . -name extension.yml -not -path './.git/*' -not -path './.specify/extensions/*' -printf '%h\n' | sort -u
+          )
+          if [ ${#packages[@]} -eq 0 ]; then
+            echo "No extension packages found — nothing to validate."
+            exit 0
+          fi
+          printf 'Found %d package(s):\n' "${#packages[@]}"
+          printf '  %s\n' "${packages[@]}"
+          python scripts/validate-extension.py "${packages[@]}"
+
+  placeholders:
+    name: Guard template placeholders
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail if template placeholders leaked into a release path
+        # Principle III: a generated extension must never ship the template's own
+        # identity. This guards the template's OWN output paths, not the template
+        # files themselves, which are supposed to contain the markers.
+        run: bash scripts/check-placeholders.sh
+
+  install-test:
+    name: Install-test cycle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install specify CLI
+        run: |
+          pip install uv
+          uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+          specify --version
+
+      - name: Install, list, and remove each extension in a clean project
+        # Principle VII: the install-run-remove cycle is the only thing that proves
+        # an extension actually works. --dev covers the local-directory form; the
+        # ZIP forms are proven at release time against the published asset.
+        run: bash scripts/install-test.sh

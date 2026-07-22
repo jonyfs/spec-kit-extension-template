@@ -1,0 +1,28 @@
+# Spec Kit local state
+.specify/extensions/*/local-config.yml
+
+# Worktrees (created by the worktrees extension)
+.worktrees/
+
+# Skill evaluation workspaces (regenerable, large)
+.claude/skills/*-workspace/
+
+# Session scratch
+.remember/now.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+*.swp

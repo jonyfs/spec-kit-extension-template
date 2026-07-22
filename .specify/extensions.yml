@@ -1,0 +1,137 @@
+installed:
+- agent-context
+- critique
+- onboard
+- ship
+- speckit-superpowers-bridge
+- staff-review
+- worktrees
+settings:
+  auto_execute_hooks: true
+hooks:
+  after_specify:
+  - extension: agent-context
+    command: speckit.agent-context.update
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Execute speckit.agent-context.update?
+    description: Refresh agent context after specification
+    condition: null
+  - extension: worktrees
+    command: speckit.worktrees.create
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.worktrees.create?
+    description: Auto-spawn a worktree after a new feature is specified
+    condition: null
+  after_plan:
+  - extension: agent-context
+    command: speckit.agent-context.update
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Execute speckit.agent-context.update?
+    description: Refresh agent context after planning
+    condition: null
+  - extension: critique
+    command: speckit.critique.run
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Run spec critique before proceeding to tasks?
+    description: Challenges the spec and plan through product and engineering lenses
+    condition: null
+  after_implement:
+  - extension: ship
+    command: speckit.ship.run
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Ship this feature?
+    description: Runs pre-flight checks, syncs branches, generates changelog, and
+      creates PR
+    condition: null
+  - extension: staff-review
+    command: speckit.staff-review.run
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Run staff-level code review?
+    description: Reviews implementation changes against spec for correctness, security,
+      and quality
+    condition: null
+  - extension: onboard
+    command: speckit.onboard.after-implement
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Execute speckit.onboard.after-implement?
+    description: ''
+    condition: null
+  before_clarify:
+  - extension: speckit-superpowers-bridge
+    command: speckit.speckit-superpowers-bridge.guard
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.speckit-superpowers-bridge.guard?
+    description: Prevent Spec Kit contract changes while Superpowers implementation
+      is executing
+    condition: null
+  before_plan:
+  - extension: speckit-superpowers-bridge
+    command: speckit.speckit-superpowers-bridge.guard
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.speckit-superpowers-bridge.guard?
+    description: Prevent Spec Kit contract changes while Superpowers implementation
+      is executing
+    condition: null
+  before_tasks:
+  - extension: speckit-superpowers-bridge
+    command: speckit.speckit-superpowers-bridge.guard
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.speckit-superpowers-bridge.guard?
+    description: Prevent Spec Kit contract changes while Superpowers implementation
+      is executing
+    condition: null
+  before_implement:
+  - extension: speckit-superpowers-bridge
+    command: speckit.speckit-superpowers-bridge.guard
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.speckit-superpowers-bridge.guard?
+    description: Block speckit.implement for features handed off to Superpowers
+    condition: null
+  - extension: onboard
+    command: speckit.onboard.before-implement
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Execute speckit.onboard.before-implement?
+    description: ''
+    condition: null
+  after_tasks:
+  - extension: speckit-superpowers-bridge
+    command: speckit.speckit-superpowers-bridge.handoff
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.speckit-superpowers-bridge.handoff?
+    description: Create the Superpowers handoff after Spec Kit task generation
+    condition: null
+  after_explain:
+  - extension: onboard
+    command: speckit.onboard.after-explain
+    enabled: true
+    optional: true
+    priority: 10
+    prompt: Execute speckit.onboard.after-explain?
+    description: ''
+    condition: null
