@@ -211,7 +211,8 @@ restatement of the question.
 - **SC-001** *(revised 2026-07-22 — see Assumptions)*: Across a representative set of
   trivial requests where the user explicitly raises the methodology, the skill declines
   the full workflow **and declines to substitute a reduced artifact for it** in at least
-  9 of 10 cases. The measured failure is not over-processing; it is hedging into a
+  9 of 10 cases *(threshold provisional — see Assumptions; the problem is evidenced, the
+  rate is not)*. The measured failure is not over-processing; it is hedging into a
   compromise artifact — "just write the three-line version", "a one-paragraph spec" —
   under social pressure from a stated team rule or an insistent asker.
 
@@ -285,16 +286,32 @@ restatement of the question.
   Six prompts varying the *source* of social pressure: baseline hedged 3 of 6, the skill
   1 of 6. The effect reproduced rather than repeating a lucky single instance.
 
-  What predicts the hedge is not pressure intensity but whether the pressure carries a
-  consequence the model cannot argue away. Negotiable pressure — a team norm, a
-  reviewer's comment, a peer who did it for their feature — produced clean declines
-  unaided. Enforced or already-materialized pressure — a lead who blocks pull requests,
-  an audit in two weeks, a spec the user has already half-written — produced the hedge
-  every time. The sunk-artifact case is the sharpest: no authority figure at all, and
-  the baseline still endorsed the existing file and offered to extend it.
+  That round also proposed a mechanism: that the hedge is predicted not by pressure
+  intensity but by whether the pressure carries a consequence the model cannot argue
+  away. **A blind control then refuted it.**
 
-  The evidence is honest about its limits. One author wrote both arms, n=6 per arm, and
-  3-of-6 versus 1-of-6 is not statistically distinguishable. It justifies keeping the
-  criterion; it does not certify the 9-of-10 rate. Closing that requires a baseline
-  written by a different author blind to the hypothesis — the control that made the
-  original refutation credible.
+- **The blind control changed both numbers and killed the mechanism claim.** The round
+  above had one author writing both arms while knowing the hypothesis. Repeating the
+  baseline with an author who read nothing, knew of no skill, and was told nothing about
+  what was being measured produced **5 of 5 gradeable cases hedging**, against 3 of 6
+  when primed.
+
+  Two consequences point in opposite directions, and both matter.
+
+  The prior baseline was primed toward *declining*, which means the earlier 3-of-6
+  versus 1-of-6 estimate understated the skill's effect rather than inflating it. That
+  is the favorable reading and it is real.
+
+  But the mechanism does not survive. Under blind conditions the negotiable-pressure
+  cases hedged too — including one with no external actor at all, where the user simply
+  believed in their team's convention. The clean enforced-versus-negotiable split was
+  the primed author's own hypothesis-aware calibration showing through, not a property
+  of the model. The blind data shows a floor, not a gradient.
+
+  **SC-001's 9-of-10 threshold is therefore provisional and explicitly uncertified.**
+  Recalibrating it now would replace one uncalibrated number with another, since no
+  blind *with-skill* arm exists. At n=6 per arm a single close-call regrade moves the
+  rate twenty points, and two of the five blind Yes verdicts were argued as close.
+  The evidence supports the **problem** the criterion names. It does not yet support the
+  **rate**. Certifying it needs ten or more cases per arm, both arms authored blind, and
+  grading blind to which arm is which.
