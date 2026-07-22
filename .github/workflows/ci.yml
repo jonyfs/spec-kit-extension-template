@@ -55,7 +55,10 @@ jobs:
         # its own build over someone else's manifest.
         run: |
           mapfile -t packages < <(
-            find . -name extension.yml -not -path './.git/*' -not -path './.specify/extensions/*' -printf '%h\n' | sort -u
+            find . -name extension.yml \
+              -not -path './.git/*' \
+              -not -path './.specify/extensions/*' \
+              -printf '%h\n' | sort -u
           )
           if [ ${#packages[@]} -eq 0 ]; then
             echo "No extension packages found — nothing to validate."

@@ -1,5 +1,36 @@
 <!--
-SYNC IMPACT REPORT (v1.5.0)
+SYNC IMPACT REPORT (v1.6.0)
+Version change: 1.5.0 → 1.6.0
+Rationale: MINOR — added one new principle (XIV. Trunk-Based Delivery Through
+Pull Requests) and one new section (Continuous Integration Gates). No existing
+principle removed or redefined.
+
+Added principles:
+- XIV. Trunk-Based Delivery Through Pull Requests
+
+Added sections:
+- Continuous Integration Gates
+
+Repository state established this amendment:
+- git initialized on `main`; remote https://github.com/jonyfs/spec-kit-extension-template (public)
+- .github/workflows/ci.yml with four jobs: lint, validate, placeholders, install-test
+- .github/pull_request_template.md carrying the per-principle checklist
+- scripts/validate-extension.py, scripts/check-placeholders.sh, scripts/install-test.sh
+
+Templates requiring updates:
+- ✅ .specify/templates/plan-template.md (constitution-driven gate; no edit)
+- ✅ .specify/templates/spec-template.md (no constitution-specific slots)
+- ✅ .specify/templates/tasks-template.md (no constitution-specific slots)
+- ✅ .specify/templates/checklist-template.md (no constitution-specific slots)
+- ✅ README.md (created; documents the workflow and validation tooling)
+- ✅ CHANGELOG.md (created; Keep a Changelog format per Principle VIII)
+- ✅ LICENSE (created; MIT)
+- ✅ docs/HOOKS.md, docs/PACKAGING.md (unchanged; still accurate)
+
+Resolved from v1.0.0: README.md, CHANGELOG.md, and LICENSE now exist.
+Follow-up TODOs: none deferred.
+
+--- PREVIOUS REPORT (v1.5.0) ---
 Version change: 1.4.0 → 1.5.0
 Rationale: MINOR — added one new principle (XIII. Proactive Use of Installed
 Extensions) and one new section (Installed Extension Baseline). No existing
@@ -367,6 +398,56 @@ Rationale: Installing seven extensions and then never routing work to them is wo
 than not installing them — it adds surface area, hook noise, and supply-chain
 exposure with no return.
 
+### XIV. Trunk-Based Delivery Through Pull Requests
+
+This project lives at `https://github.com/jonyfs/spec-kit-extension-template`.
+`main` is the trunk and is never committed to directly. Every change — feature,
+fix, or documentation — lands through a pull request that targets `main` from a
+short-lived branch, and every pull request MUST have all CI gates green before
+merge. A branch whose CI is red is not ready for review.
+
+When an implementation completes successfully, opening the pull request is part of
+finishing the work, not a separate optional step. The installed `ship` extension
+(`speckit.ship.run`, offered by the `after_implement` hook) is the supported path:
+it runs pre-flight readiness checks, syncs the branch, generates the changelog
+entry, verifies CI, and creates the PR. Its confirmations default to **no** by
+design — a push and a PR creation are each authorized separately, and that
+default MUST NOT be worked around.
+
+A pull request MUST state what changed and why, link the Spec Kit artifacts it
+implements when the work was spec-driven, and carry the constitution checklist from
+`.github/pull_request_template.md` with every applicable row honestly checked. A
+checkbox ticked without the corresponding check having been run is a false
+statement about the change, and is worse than an unchecked box.
+
+Rationale: The gates only mean something if they run before the code is trunk, and
+a PR is the only artifact where a human, the CI, and the review extensions all look
+at the same diff at the same time.
+
+## Continuous Integration Gates
+
+CI is defined in `.github/workflows/ci.yml` and runs on every push to `main`, every
+pull request targeting `main`, and on manual dispatch. Four jobs, each mechanizing a
+principle that is otherwise only aspirational:
+
+| Job | Enforces | Implementation |
+|---|---|---|
+| Lint Markdown and YAML | Readability of hand-authored files | `yamllint`, `markdownlint-cli2` |
+| Validate extension manifests | Principles I, II, IV, V, VIII | `scripts/validate-extension.py` |
+| Guard template placeholders | Principle III | `scripts/check-placeholders.sh` |
+| Install-test cycle | Principle VII | `scripts/install-test.sh` |
+
+Two scoping rules keep the gates honest. Vendored third-party extensions under
+`.specify/extensions/` are excluded from every job: they belong to their upstream
+authors, and this repository does not get to fail its own build over someone else's
+manifest. Machine-generated state under `.specify/` is likewise excluded from
+linting, because a file the `specify` CLI rewrites on every install cannot be held
+to this project's formatting.
+
+A gate MUST NOT be weakened to make a red build green. Either the change is wrong,
+or the gate's scope is wrong — and if it is the gate, the scope change is itself a
+reviewable pull request explaining why, not a quiet edit bundled into unrelated work.
+
 ## Installed Extension Baseline
 
 Verified with `specify extension list` against specify-cli 0.11.3. All six
@@ -473,4 +554,4 @@ plan's Complexity Tracking section or removed.
 Runtime development guidance lives in `CLAUDE.md` and the active feature's
 `plan.md`; neither may contradict this constitution.
 
-**Version**: 1.5.0 | **Ratified**: 2026-07-21 | **Last Amended**: 2026-07-21
+**Version**: 1.6.0 | **Ratified**: 2026-07-21 | **Last Amended**: 2026-07-21
