@@ -1,7 +1,10 @@
 extends: default
 
+# Machine-generated and vendored files are excluded. This repo does not control
+# their formatting, and failing our own build over the specify CLI's output
+# would make the gate meaningless.
 ignore: |
-  .specify/extensions/
+  .specify/
   .claude/skills/
 
 rules:
